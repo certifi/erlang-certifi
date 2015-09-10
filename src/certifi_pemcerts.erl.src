@@ -1,0 +1,9 @@
+%% -*- coding: utf-8 -*-
+-module(certifi_pemcerts).
+
+-export([pemcerts/0]).
+
+pemcerts() ->
+    <<"
+%% GENERATED
+">>.
