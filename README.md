@@ -11,12 +11,13 @@ is derived from Mozilla's canonical set.
 Usage
 -----
 
-    Cacerts = certifi:cacerts(),
-    Ssloptions = [{verify, verify_peer},
-                  {depth, 99},
-                  {cacerts, Cacerts}],
-    ssl:connect( "example.com", 443, Ssloptions] ).
-
+```erlang
+Cacerts = certifi:cacerts(),
+Ssloptions = [{verify, verify_peer},
+              {depth, 99},
+              {cacerts, Cacerts}],
+ssl:connect( "example.com", 443, Ssloptions] ).
+```
 Build
 -----
 
