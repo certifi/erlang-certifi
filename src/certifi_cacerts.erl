@@ -1,5 +1,5 @@
 %% -*- coding: utf-8 -*-
--module(certifi_pemcerts).
+-module(certifi_cacerts).
 
 -export([pemcerts/0]).
 
