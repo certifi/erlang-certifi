@@ -26,4 +26,4 @@ Build
 Regenerate the certificates
 ---------------------------
 
-    $ ./mkcert.sh
+    $ ./mkcert.escript

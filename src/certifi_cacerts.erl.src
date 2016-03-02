@@ -1,9 +1,0 @@
-%% -*- coding: utf-8 -*-
--module(certifi_cacerts).
-
--export([pemcerts/0]).
-
-pemcerts() ->
-    <<"
-%% GENERATED
-">>.
