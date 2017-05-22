@@ -18,4 +18,5 @@ _tdeps
 logs
 _build
 
+src/certifi_cacerts.erl
 certs_spec/*.erl

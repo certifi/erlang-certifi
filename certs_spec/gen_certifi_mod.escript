@@ -12,7 +12,8 @@ build_module(Mod, Certs) ->
            "-compile([compressed, no_line_info]).\n",
            "-export([ders/0]).\n\n",
            "ders() ->", io_lib:format("~n    ~p.~n", [Cacerts])],
-    ok = file:write_file(Mod ++ ".erl", Src),
+    OutputPath = filename:join(["..", "src", Mod ++ ".erl"]),
+    ok = file:write_file(OutputPath, Src),
     ok.
 
 main(_) ->
