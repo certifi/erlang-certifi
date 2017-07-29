@@ -4,8 +4,14 @@
 parse_transform(Forms, _Opts) ->
   [replace_cacerts(Form) || Form <- Forms].
 
+cert_file() ->
+  AppDir = filename:dirname(
+             filename:dirname(code:which(?MODULE))
+            ),
+  filename:join([AppDir, "certs_spec", "cacerts.pem"]).
+
 replace_cacerts({function, Ann, cacerts, 0, [_]}) ->
-  {ok, Binary} = file:read_file("certs_spec/cacerts.pem"),
+  {ok, Binary} = file:read_file(cert_file()),
   Pems = public_key:pem_decode(Binary),
   Cacerts = [Der || {'Certificate', Der, _} <- Pems],
   Body = lists:foldl(fun(Cert, Acc) ->
