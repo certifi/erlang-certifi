@@ -8,7 +8,7 @@ cert_file() ->
   AppDir = filename:dirname(
              filename:dirname(code:which(?MODULE))
             ),
-  filename:join([AppDir, "certs_spec", "cacerts.pem"]).
+  filename:join([AppDir, "priv", "cacerts.pem"]).
 
 replace_cacerts({function, Ann, cacerts, 0, [_]}) ->
   {ok, Binary} = file:read_file(cert_file()),
