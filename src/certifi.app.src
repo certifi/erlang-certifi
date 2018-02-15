@@ -1,6 +1,6 @@
 {application, 'certifi',
  [{description, "An OTP library"},
-  {vsn, "2.0.0"},
+  {vsn, "2.1.0"},
   {registered, []},
   {applications,
    [kernel,
