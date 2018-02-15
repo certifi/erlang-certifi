@@ -18,6 +18,14 @@ Ssloptions = [{verify, verify_peer},
               {cacerts, Cacerts}],
 ssl:connect( "example.com", 443, Ssloptions] ).
 ```
+
+
+You can also retrieve the path to the file and load it by yourself if needed:
+
+```
+Path = certifi:cacertfile().
+```
+
 Build
 -----
 
