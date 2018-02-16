@@ -1,0 +1,14 @@
+sudo: false
+language: erlang
+before_install: set -e
+after_script: set +e
+install: curl -#fSLo ~/.local/bin/rebar3 https://s3.amazonaws.com/rebar3/rebar3 && chmod +x ~/.local/bin/rebar3
+script: ./rebar3 eunit
+notifications:
+  email:
+    on_success: never
+otp_release:
+  - 20.2
+  - 19.3
+  - 18.3
+  - 17.5
