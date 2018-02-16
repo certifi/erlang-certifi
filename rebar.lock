@@ -1,1 +1,6 @@
-[].
+{"1.1.0",
+[{<<"parse_trans">>,{pkg,<<"parse_trans">>,<<"3.1.0">>},0}]}.
+[
+{pkg_hash,[
+ {<<"parse_trans">>, <<"1BAD3B959941CC53FFD6F4769A5D2666F9CDF179B2D62826636497D3FBAD9EC0">>}]}
+].
