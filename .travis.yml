@@ -4,7 +4,10 @@ before_install: set -e
 after_script: set +e
 install: curl -#fSLo ~/rebar3 https://s3.amazonaws.com/rebar3/rebar3 && chmod +x ~/rebar3
 after_install: ~/rebar3 version
-script: ~/rebar3 eunit
+script:
+  - if [[ "$TRAVIS_OTP_RELEASE" = '20.2' ]] && [[ "$TRAVIS_EVENT_TYPE" = 'cron' ]]; then make update; fi
+  - ~/rebar3 eunit
+  - '[[ 0 -eq $(git --no-pager diff | wc -l) ]]'
 notifications:
   email:
     on_success: never
