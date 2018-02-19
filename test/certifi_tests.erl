@@ -2,9 +2,11 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+-ifdef('OTP_20_AND_ABOVE').
 reproducible_module_test() ->
     %% When compiled with +deterministic, only version is left out.
     ?assertMatch([{version,[_|_]}], certifi:module_info(compile)).
+-endif.
 
 cacerts_test_() ->
     Certs = [Cert1, Cert2, Cert3 | _] = certifi:cacerts(),

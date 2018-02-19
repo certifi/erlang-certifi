@@ -2,9 +2,9 @@ sudo: false
 language: erlang
 before_install: set -e
 after_script: set +e
-install: curl -#fSLo ~/.local/bin/rebar3 https://s3.amazonaws.com/rebar3/rebar3 && chmod +x ~/.local/bin/rebar3
-after_install: rebar3 version
-script: ./rebar3 eunit
+install: curl -#fSLo ~/rebar3 https://s3.amazonaws.com/rebar3/rebar3 && chmod +x ~/rebar3
+after_install: ~/rebar3 version
+script: ~/rebar3 eunit
 notifications:
   email:
     on_success: never

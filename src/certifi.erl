@@ -1,5 +1,5 @@
 -module(certifi).
--compile([deterministic, {parse_transform,ct_expand}]).
+-compile({parse_transform, ct_expand}).
 
 -export([cacertfile/0,
          cacerts/0]).
