@@ -12,7 +12,8 @@ notifications:
   email:
     on_success: never
 otp_release:
-  - 20.2
+  - 21.0
+  - 20.3
   - 19.3
   - 18.3
   - 17.5
