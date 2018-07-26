@@ -2,8 +2,23 @@
  [{description, "CA bundle adapted from Mozilla by https://certifi.io"},
   {vsn, "2.5.1"},
   {registered, []},
-  {applications, [kernel,stdlib]},
-  {env,[]},
+  {mod, {certifi_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    compiler,
+    crypto,
+    inets,
+    public_key,
+    ssl,
+    %% External dependencies
+    parse_trans,
+    ssl_verify_fun
+   ]},
+  {env,
+   [{auto_update_interval, 3600}, % in seconds
+    {auto_update_url, "https://curl.haxx.se/ca/cacert.pem"}
+   ]},
   {modules, []},
 
   {maintainers, ["Benoit Chesneau"]},
