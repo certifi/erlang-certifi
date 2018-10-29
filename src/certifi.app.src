@@ -1,5 +1,5 @@
 {application, certifi,
- [{description, "CA bundle adapted from Mozilla by http://certifi.io"},
+ [{description, "CA bundle adapted from Mozilla by https://certifi.io"},
   {vsn, "2.4.2"},
   {registered, []},
   {applications, [kernel,stdlib,parse_trans]},
