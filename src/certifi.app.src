@@ -6,7 +6,6 @@
   {env,[]},
   {modules, []},
 
-  {maintainers, ["Benoit Chesneau"]},
   {licenses, ["BSD"]},
   {links, [{"Github", "https://github.com/certifi/erlang-certifi"}]},
   {files, ["src",
