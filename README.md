@@ -10,11 +10,11 @@ is derived from Mozilla's canonical set.
 ## Usage
 
 ```erlang
-Cacerts = certifi:cacerts(),
-Ssloptions = [{verify, verify_peer},
+CaCerts = certifi:cacerts(),
+SslOptions = [{verify, verify_peer},
               {depth, 99},
-              {cacerts, Cacerts}],
-ssl:connect( "example.com", 443, Ssloptions] ).
+              {cacerts, CaCerts}],
+ssl:connect( "example.com", 443, SslOptions ).
 ```
 
 
