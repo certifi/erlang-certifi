@@ -32,4 +32,5 @@ jobs:
           fetch-depth: 0
       - run: rebar3 --version
       - run: rebar3 eunit
-      - run: '[[ 0 -eq $(git --no-pager diff | wc -l) ]]'
+      - shell: bash
+        run: '[[ 0 -eq $(git --no-pager diff | wc -l) ]]'
