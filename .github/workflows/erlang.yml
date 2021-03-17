@@ -24,16 +24,7 @@ jobs:
     steps:
       - run: |
           apt-get update
-          apt-get -y install tcl tcl-dev gettext
-          cd /usr/src/
-          wget https://github.com/git/git/archive/v2.18.0.tar.gz -O git.tar.gz
-          tar -xf git.tar.gz
-          cd git-*
-          make prefix=/usr/local all
-          make prefix=/usr/local install
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - run: rebar3 --version
       - run: rebar3 eunit
       - run: rebar3 dialyzer
