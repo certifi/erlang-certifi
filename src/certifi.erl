@@ -26,9 +26,13 @@ cacertfile() ->
 -spec cacerts() -> [binary(),...].
 cacerts() ->
     ct_expand:term(
-      lists:reverse(
-        [Der || {ok,Bin} <- [file:read_file(cacertfile())],
-                {'Certificate',Der,_} <- public_key:pem_decode(Bin)
-        ]
+      lists:foldl(
+        fun ({'Certificate', Der, _}, Acc) ->
+                [Der | Acc]
+        end,
+        [],
+        (fun ({ok, Bin}) ->
+                 public_key:pem_decode(Bin)
+         end)(file:read_file(cacertfile()))
        )
      ).
