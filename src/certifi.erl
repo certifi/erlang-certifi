@@ -1,9 +1,8 @@
 -module(certifi).
--compile({parse_transform, ct_expand}).
+-compile({parse_transform, certifi_pt}).
 
 -export([cacertfile/0,
          cacerts/0]).
-
 
 %% @doc CACertFile gives the path to the file with an X.509 certificate list
 %% containing the Mozilla CA Certificate that can then be used via the
@@ -25,14 +24,4 @@ cacertfile() ->
 %% passed to the connect function.
 -spec cacerts() -> [binary(),...].
 cacerts() ->
-    ct_expand:term(
-      lists:foldl(
-        fun ({'Certificate', Der, _}, Acc) ->
-                [Der | Acc]
-        end,
-        [],
-        (fun ({ok, Bin}) ->
-                 public_key:pem_decode(Bin)
-         end)(file:read_file(cacertfile()))
-       )
-     ).
+    ok.
