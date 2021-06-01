@@ -10,9 +10,9 @@ reproducible_module_test() ->
 
 cacerts_test_() ->
     Certs = [Cert1, Cert2, Cert3 | _] = certifi:cacerts(),
-    [?_assertEqual(127, length(Certs))
-    ,?_assertMatch(<<48,130,2,11,48,130,1,145,160,3,2,1,2,2,18,17,210,187,186,51,_/binary>>, Cert1)
-    ,?_assertMatch(<<48,130,5,90,48,130,3,66,160,3,2,1,2,2,18,17,210,187,185,215,_/binary>>, Cert2)
-    ,?_assertMatch(<< 48,130,2,110,48,130,1,243,160,3,2,1,2,2,16,98,246,50,108, _ / binary>>, Cert3)
+    [?_assertEqual(128, length(Certs))
+    ,?_assertMatch(<<48,130,5,192,48,130,3,168,160,3,2,1,2,2,16,30,191,89,80,184,_/binary>>, Cert1)
+    ,?_assertMatch(<<48,130,2,101,48,130,1,235,160,3,2,1,2,2,16,120,143,39,92,_/binary>>, Cert2)
+    ,?_assertMatch(<<48,130,5,239,48,130,3,215,160,3,2,1,2,2,8,13,211,227,188,_/binary>>, Cert3)
     ,?_assertMatch(<<48,130,3,117,48,130,2,93,160,3,2,1,2,2,11,4,0,0,0,0,1,21,75,90,195,148,48,13,6,_/binary>>, lists:last(Certs))
     ].
