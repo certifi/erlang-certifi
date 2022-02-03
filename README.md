@@ -9,6 +9,9 @@ Erlang can find itself, or where a uniform set of CAs is valuable.
 This an Erlang specific port of [certifi](https://certifi.io/). The CA bundle
 is derived from Mozilla's canonical set.
 
+List of included certificates:
+https://ccadb-public.secure.force.com/mozilla/IncludedCACertificateReport
+
 ## Usage
 
 ```erlang
