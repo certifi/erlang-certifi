@@ -17,3 +17,5 @@ _tdeps
 logs
 /_build
 ebin/
+doc/*
+!doc/overview.edoc
