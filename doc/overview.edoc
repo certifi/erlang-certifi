@@ -1,6 +1,0 @@
-@author Benoit Chesneau
-@title certifi
-@doc Erlang library contains a CA bundle that you can reference in your Erlang application.
-@copyright BSD
-@reference CA bundle adapted from Mozilla by https://certifi.io
-
