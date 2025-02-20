@@ -1,5 +1,5 @@
 -module(certifi).
-%% Causes the parse transformation function Module:parse_transform/2 
+%% Causes the parse transformation function Module:parse_transform/2
 %% to be applied to the parsed code before the code is checked for errors.
 -compile({parse_transform, certifi_pt}).
 
@@ -7,9 +7,10 @@
          cacerts/0]).
 
 %% @doc CACertFile gives the path to the file with an X.509 certificate list
-%% containing the Mozilla CA Certificate that can then be used via the
-%% cacertfile setting in ssl options passed to the connect function.
-
+%% containing the Mozilla CA Certificate.
+%%
+%% The file is used via the `cacertfile' setting in {@link //ssl/ssl} options,
+%% passed to the `ssl:connect/2,3,4' function.
 -spec cacertfile() -> Result when
 	Result :: file:filename_all().
 cacertfile() ->
@@ -25,8 +26,10 @@ cacertfile() ->
   filename:join(PrivDir, "cacerts.pem").
 
 %% @doc CACerts builds an X.509 certificate list containing the Mozilla CA
-%% Certificate that can then be used via the cacerts setting in ssl options
-%% passed to the connect function.
+%% Certificate.
+%%
+%% The certificate list is used via the `cacerts' setting in {@link //ssl/ssl}
+%% options, passed to the `connect/2,3,4' function.
 -spec cacerts() -> [binary(),...].
 cacerts() ->
     ok.

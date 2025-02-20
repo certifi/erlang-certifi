@@ -1,6 +1,8 @@
 # [certifi](https://github.com/certifi/erlang-certifi)
 
-[![Build Status](https://github.com/certifi/erlang-certifi/workflows/build/badge.svg)](https://github.com/certifi/erlang-certifi)
+[![CI](https://github.com/certifi/erlang-certifi/actions/workflows/erlang.yml/badge.svg)](https://github.com/certifi/erlang-certifi/actions/workflows/erlang.yml)
+[![Hex](https://img.shields.io/hexpm/v/certifi.svg)](https://hex.pm/packages/certifi)
+[![HexDocs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/certifi)
 
 This Erlang library contains a CA bundle that you can reference in your Erlang
 application. This is useful for systems that do not have CA bundles that
@@ -29,22 +31,16 @@ You can also retrieve the path to the file and load it by yourself if needed:
 Path = certifi:cacertfile().
 ```
 
-## Build & test
+## Development
+
+Testing:
 
 ```shell
-$ rebar3 eunit
+rebar3 eunit
 ```
 
-## Documentation generation
+Documentation:
 
-### Edoc
-
-#### Generate public API
-`rebar3 edoc`
-
-#### Generate private API
-`rebar3 as edoc_private edoc`
-
-### ExDoc
-
-`rebar3 ex_doc --output edoc`
+```shell
+rebar3 ex_doc
+```
