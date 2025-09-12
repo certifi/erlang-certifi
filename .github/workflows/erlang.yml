@@ -17,9 +17,9 @@ jobs:
       image: erlang:${{matrix.otp}}
     strategy:
       matrix:
-        otp: [21, 22, 23, 24, 25, 26, 27]
+        otp: [21, 22, 23, 24, 25, 26, 27, 28]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: rebar3 --version
       - run: rebar3 eunit
       - run: rebar3 dialyzer
