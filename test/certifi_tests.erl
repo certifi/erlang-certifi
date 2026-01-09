@@ -9,10 +9,17 @@ reproducible_module_test() ->
 -endif.
 
 cacerts_test_() ->
-    Certs = [Cert1, Cert2, Cert3 | _] = certifi:cacerts(),
-    [?_assertEqual(143, length(Certs))
-    ,?_assertMatch(<<48,130,5,131,48,130,3,107,160,3,2,1,2,2,16,85,165,217,103,148,_/binary>>, Cert1)
-    ,?_assertMatch(<<48,130,2,53,48,130,1,186,160,3,2,1,2,2,16,35,249,195,214,53,_/binary>>, Cert2)
-    ,?_assertMatch(<<48,130,5,147,48,130,3,123,160,3,2,1,2,2,20,67,250,12,95,78,_/binary>>, Cert3)
-    ,?_assertMatch(<<48,130,4,145,48,130,3,121,160,3,2,1,2,2,4,69,107,80,84,48,_/binary>>, lists:last(Certs))
+    %% Checking the contents is difficult because they change frequently.
+    %% Therefore, this test only checks that certificates are loaded.
+    Certs = certifi:cacerts(),
+    [?_assert(length(Certs) > 0)
+    ,?_assert(lists:all(fun is_binary/1, Certs))
+    ].
+
+cacerts_test_data_test_() ->
+    Certs = [Cert1, Cert2, Cert3] = certifi:cacerts_test_data(),
+    [?_assertEqual(3, length(Certs))
+    ,?_assertMatch(<<48,130,3,199,48,130,2,175,160,3,2,1,2,2,20,46,59,44,50,129,_/binary>>, Cert1)
+    ,?_assertMatch(<<48,130,3,199,48,130,2,175,160,3,2,1,2,2,20,22,71,8,124,36,_/binary>>, Cert2)
+    ,?_assertMatch(<<48,130,3,199,48,130,2,175,160,3,2,1,2,2,20,39,199,152,45,116,_/binary>>, Cert3)
     ].
