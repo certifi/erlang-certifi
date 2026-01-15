@@ -1,13 +1,6 @@
 -module(certifi_pt).
 -export([parse_transform/2]).
 
-%% The function replace_cacerts/1 calls public_key:pem_decode/1.
-%% Dialyzer warns that public_key:pem_decode/1 is undefined because
-%% the public_key application is not listed in the certifi.app.src file.
-%% Since public_key is not required at runtime, we suppress this warning
-%% instead of adding public_key as a dependency.
--dialyzer([{no_unknown, [replace_cacerts/1]}]).
-
 parse_transform(Forms, _Opts) ->
   [replace_cacerts(Form) || Form <- Forms].
 
