@@ -31,6 +31,10 @@ You can also retrieve the path to the file and load it by yourself if needed:
 Path = certifi:cacertfile().
 ```
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
 ## Development
 
 Testing:
