@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Verify the 118 bundled roots match curl's Mozilla bundle dated 2026-10-20,
+  including removal of the distrusted emSign C1, C3, and G3 roots.
+- Download updates from curl's Mozilla CA extraction, verify its SHA-256 checksum,
+  and validate the PEM before replacing the bundle.
+- Test that the embedded roots match the PEM file and exclude distrusted emSign roots.
+
 ## 2.17.0 (2026-06-05)
 
 - Update CA bundle to the Mozilla set as of May 2026 (119 certificates).

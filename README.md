@@ -11,8 +11,9 @@ Erlang can find itself, or where a uniform set of CAs is valuable.
 This an Erlang specific port of [certifi](https://certifi.io/). The CA bundle
 is derived from Mozilla's canonical set.
 
-List of included certificates:
-https://ccadb-public.secure.force.com/mozilla/IncludedCACertificateReport
+The bundled 118 certificates were verified on 2026-10-23 against the
+[Mozilla CA bundle published by curl](https://curl.se/docs/caextract.html),
+dated 2026-10-20. The distrusted emSign C1, C3, and G3 roots are excluded.
 
 ## Usage
 
@@ -36,6 +37,19 @@ Path = certifi:cacertfile().
 See [CHANGELOG.md](CHANGELOG.md).
 
 ## Development
+
+Update the CA bundle from curl's Mozilla extraction (requires curl and OpenSSL):
+
+```shell
+make update
+rebar3 clean
+rebar3 eunit
+```
+
+The update verifies the published SHA-256 checksum and parses the certificates
+before replacing `priv/cacerts.pem`. Review changes to the trust roots and update
+the test expectations before committing. Clean before rebuilding because the
+certificates are embedded into the module at compile time.
 
 Testing:
 
