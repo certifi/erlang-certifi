@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.18.0 (2026-10-23)
 
 - Verify the 118 bundled roots match curl's Mozilla bundle dated 2026-10-20,
   including removal of the distrusted emSign C1, C3, and G3 roots.
