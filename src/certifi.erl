@@ -8,8 +8,8 @@
          eu_cacertfile/0,
          eu_cacerts/0]).
 
-%% Only used when the EU bundle is not embedded at compile time.
--compile({nowarn_unused_function, [load_eu_cacerts/0]}).
+%% Only used for bundles that are not embedded at compile time.
+-compile({nowarn_unused_function, [load/2]}).
 
 %% @doc CACertFile gives the path to the file with an X.509 certificate list
 %% containing the Mozilla CA Certificate.
@@ -26,9 +26,13 @@ cacertfile() ->
 %%
 %% The certificate list is used via the `cacerts' setting in {@link //ssl/ssl}
 %% options, passed to the `connect/2,3,4' function.
+%%
+%% The list is embedded in the module at compile time unless certifi was
+%% compiled with a `CERTIFI_EMBED' setting that leaves out `mozilla'. It is
+%% then read from {@link cacertfile/0} on first use and cached.
 -spec cacerts() -> [binary(),...].
 cacerts() ->
-    ok.
+    load(cacerts, cacertfile()).
 
 %% @doc Path to the file with the CA certificates for qualified website
 %% authentication (QWAC) taken from the EU trusted lists.
@@ -44,20 +48,25 @@ eu_cacertfile() ->
 %% (QWAC) taken from the EU trusted lists.
 %%
 %% By default the list is read from {@link eu_cacertfile/0} on first use and
-%% cached. Compile certifi with `CERTIFI_EMBED_EU=1' in the environment, or
-%% with `{d, 'CERTIFI_EMBED_EU'}', to embed it in the module instead.
+%% cached. Compile certifi with a `CERTIFI_EMBED' setting that includes `eu'
+%% to embed it in the module instead.
 -spec eu_cacerts() -> [binary(),...].
 eu_cacerts() ->
-    case persistent_term:get({?MODULE, eu_cacerts}, undefined) of
-        undefined -> load_eu_cacerts();
-        Certs -> Certs
-    end.
+    load(eu_cacerts, eu_cacertfile()).
 
-load_eu_cacerts() ->
-    {ok, Pem} = file:read_file(eu_cacertfile()),
-    Certs = [Der || {'Certificate', Der, not_encrypted} <- public_key:pem_decode(Pem)],
-    persistent_term:put({?MODULE, eu_cacerts}, Certs),
-    Certs.
+%% Same order as the embedded lists, so results do not depend on how certifi
+%% was compiled.
+load(Key, File) ->
+    case persistent_term:get({?MODULE, Key}, undefined) of
+        undefined ->
+            {ok, Pem} = file:read_file(File),
+            Certs = lists:reverse(
+                      [Der || {'Certificate', Der, not_encrypted} <- public_key:pem_decode(Pem)]),
+            persistent_term:put({?MODULE, Key}, Certs),
+            Certs;
+        Certs ->
+            Certs
+    end.
 
 priv_dir() ->
   case code:priv_dir(certifi) of
