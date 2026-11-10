@@ -1,6 +1,7 @@
 -module(certifi_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("public_key/include/public_key.hrl").
 
 -ifdef('OTP_20_AND_ABOVE').
 reproducible_module_test() ->
@@ -35,3 +36,35 @@ distrusted_emsign_roots_test_() ->
     ],
     [{Name, ?_assertNot(lists:member(Fingerprint, Fingerprints))}
      || {Name, Fingerprint} <- Distrusted].
+
+eu_cacertfile_matches_eu_cacerts_test() ->
+    {ok, Pem} = file:read_file(certifi:eu_cacertfile()),
+    Certs = [Der || {'Certificate', Der, _} <- public_key:pem_decode(Pem)],
+    ?assert(length(Certs) > 0),
+    ?assertEqual(lists:sort(Certs), lists:sort(certifi:eu_cacerts())).
+
+eu_cacerts_are_unique_ca_certificates_test() ->
+    Certs = certifi:eu_cacerts(),
+    ?assertEqual(length(Certs), length(lists:usort(Certs))),
+    %% OTP 21 and 22 cannot decode RSA-PSS signed certificates; ssl ignores
+    %% those, so only check the ones this release can decode.
+    Decoded = [Otp || Der <- Certs, Otp <- decode(Der)],
+    ?assert(length(Decoded) > 0),
+    [?assert(is_ca(Otp)) || Otp <- Decoded].
+
+decode(Der) ->
+    try [public_key:pkix_decode_cert(Der, otp)]
+    catch _:_ -> []
+    end.
+
+eu_cacerts_entries_have_metadata_test() ->
+    {ok, Pem} = file:read_file(certifi:eu_cacertfile()),
+    Blocks = tl(binary:split(Pem, <<"# Territory: ">>, [global])),
+    ?assertEqual(length(certifi:eu_cacerts()), length(Blocks)),
+    [?assertMatch({_, _}, binary:match(B, <<"# SHA256: ">>)) || B <- Blocks].
+
+is_ca(#'OTPCertificate'{tbsCertificate = #'OTPTBSCertificate'{extensions = Exts}}) ->
+    lists:any(fun(#'Extension'{extnID = ?'id-ce-basicConstraints',
+                               extnValue = #'BasicConstraints'{cA = CA}}) -> CA;
+                 (_) -> false
+              end, Exts).

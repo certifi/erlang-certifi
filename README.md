@@ -32,6 +32,42 @@ You can also retrieve the path to the file and load it by yourself if needed:
 Path = certifi:cacertfile().
 ```
 
+## EU trusted lists
+
+certifi also ships an opt-in bundle with the CA certificates EU member states
+list as qualified to issue website authentication certificates (QWACs):
+
+```erlang
+EuCerts = certifi:eu_cacerts(),
+EuPath = certifi:eu_cacertfile().
+```
+
+Many of these are issuing CAs rather than roots, so you need a `partial_chain`
+option to use them with `ssl`. See
+[EU trusted lists](guides/eu-trusted-lists.md) for usage and how the bundle
+is built.
+
+## Choose which bundles are compiled in
+
+By default only the Mozilla bundle is embedded in the module. Select the
+bundles to embed with `CERTIFI_EMBED` (`mozilla`, `eu`, `mozilla,eu` or
+`none`). Bundles that are not embedded are read from `priv` on first use, so
+both functions always work.
+
+```erlang
+%% rebar.config of your application
+{overrides, [
+    {add, certifi, [{erl_opts, [{d, 'CERTIFI_EMBED', [mozilla, eu]}]}]}
+]}.
+```
+
+```shell
+CERTIFI_EMBED=eu rebar3 compile
+```
+
+See [Choose which bundles are compiled in](guides/eu-trusted-lists.md#choose-which-bundles-are-compiled-in)
+for details.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
@@ -50,6 +86,21 @@ The update verifies the published SHA-256 checksum and parses the certificates
 before replacing `priv/cacerts.pem`. Review changes to the trust roots and update
 the test expectations before committing. Clean before rebuilding because the
 certificates are embedded into the module at compile time.
+
+Update the EU bundle from the EU trusted lists (requires curl, xmlsec1 and
+OTP 24 or later):
+
+```shell
+make update-eu
+rebar3 clean
+rebar3 eunit
+```
+
+Every list is signature checked before use. See
+[EU trusted lists](guides/eu-trusted-lists.md#update-the-bundle) for details.
+
+A scheduled workflow runs both updates every week and opens a pull request
+when a bundle changed.
 
 Testing:
 

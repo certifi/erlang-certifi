@@ -1,0 +1,59 @@
+---
+name: update CA bundles
+on:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "28"
+          rebar3-version: "3"
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends xmlsec1
+      - name: Update Mozilla bundle
+        run: make update
+      - name: Update EU bundle
+        run: make update-eu REPORT="$RUNNER_TEMP/eu-report.md"
+      - name: Run tests
+        id: tests
+        continue-on-error: true
+        run: rebar3 eunit
+      - name: Write pull request body
+        env:
+          TESTS: ${{ steps.tests.outcome }}
+        run: |
+          {
+            echo "Weekly update of the CA bundles from curl's Mozilla extraction and the EU trusted lists."
+            echo
+            if [ "$TESTS" != "success" ]; then
+              echo "**Tests fail with the new bundles.** Review the trust root changes and update the test expectations."
+              echo
+            fi
+            if ! git diff --quiet -- priv/cacerts.pem; then
+              echo "The Mozilla bundle changed."
+              echo
+            fi
+            cat "$RUNNER_TEMP/eu-report.md"
+          } > "$RUNNER_TEMP/pr-body.md"
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          # Pull requests opened with the default token do not trigger CI.
+          # Set CA_BUNDLE_PR_TOKEN to a token with contents and pull request
+          # write access to have CI run on them.
+          token: ${{ secrets.CA_BUNDLE_PR_TOKEN || github.token }}
+          branch: automation/update-ca-bundles
+          delete-branch: true
+          commit-message: update CA bundles
+          title: Update CA bundles
+          body-path: ${{ runner.temp }}/pr-body.md
+          add-paths: |
+            priv/cacerts.pem
+            priv/eu_cacerts.pem
+            scripts/eu_lotl_signers.pem
