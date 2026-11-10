@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.19.0 (2026-11-10)
 
 - New opt-in EU bundle: `certifi:eu_cacerts/0` and `certifi:eu_cacertfile/0`
   return the CA certificates EU member states list as qualified to issue
