@@ -44,8 +44,29 @@ EuPath = certifi:eu_cacertfile().
 
 Many of these are issuing CAs rather than roots, so you need a `partial_chain`
 option to use them with `ssl`. See
-[EU trusted lists](guides/eu-trusted-lists.md) for usage, the compile time
-option, and how the bundle is built.
+[EU trusted lists](guides/eu-trusted-lists.md) for usage and how the bundle
+is built.
+
+## Choose which bundles are compiled in
+
+By default only the Mozilla bundle is embedded in the module. Select the
+bundles to embed with `CERTIFI_EMBED` (`mozilla`, `eu`, `mozilla,eu` or
+`none`). Bundles that are not embedded are read from `priv` on first use, so
+both functions always work.
+
+```erlang
+%% rebar.config of your application
+{overrides, [
+    {add, certifi, [{erl_opts, [{d, 'CERTIFI_EMBED', [mozilla, eu]}]}]}
+]}.
+```
+
+```shell
+CERTIFI_EMBED=eu rebar3 compile
+```
+
+See [Choose which bundles are compiled in](guides/eu-trusted-lists.md#choose-which-bundles-are-compiled-in)
+for details.
 
 ## Changelog
 

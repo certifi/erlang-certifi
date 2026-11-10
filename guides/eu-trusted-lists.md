@@ -69,35 +69,69 @@ SslOptions = [{verify, verify_peer}, {cacertfile, Path}].
 
 `partial_chain` still applies when the issuer in the file is not a root.
 
-## Embed the bundle at compile time
+## Choose which bundles are compiled in
 
-By default `certifi:eu_cacerts/0` reads `priv/eu_cacerts.pem` on first call
-and caches the result in `persistent_term`. To embed the certificates in the
-`certifi` module instead, like `certifi:cacerts/0`, compile certifi with
-`CERTIFI_EMBED_EU` set.
+Both bundles are always available: `certifi:cacerts/0` (Mozilla) and
+`certifi:eu_cacerts/0` (EU) work whatever you choose. The choice only decides
+which ones are embedded in `certifi.beam` at compile time. A bundle that is
+not embedded is read from its PEM file in `priv` on first call and cached in
+`persistent_term`.
 
-With rebar3:
+| `CERTIFI_EMBED`  | Embedded         | `certifi.beam` |
+|------------------|------------------|----------------|
+| `mozilla`        | Mozilla only (default) | 225 KB   |
+| `eu`             | EU only          | 375 KB         |
+| `mozilla,eu`     | Both             | 595 KB         |
+| `none`           | Neither          | 3 KB           |
 
-```shell
-rm -rf _build/default/lib/certifi
-CERTIFI_EMBED_EU=1 rebar3 compile
-```
+Embed the bundles you use on every connection. Leave out the ones you rarely
+use, or all of them if you prefer a smaller module and a file read on first
+use.
 
-Or set it in your `rebar.config`:
+### In your rebar.config
+
+Add an override for the certifi dependency:
 
 ```erlang
+{deps, [certifi]}.
+
 {overrides, [
-    {add, certifi, [{erl_opts, [{d, 'CERTIFI_EMBED_EU'}]}]}
+    {add, certifi, [{erl_opts, [{d, 'CERTIFI_EMBED', [mozilla, eu]}]}]}
 ]}.
+```
+
+The value is a list of `mozilla` and `eu`, or `none`. rebar3 recompiles
+certifi when you change it.
+
+### With an environment variable
+
+```shell
+CERTIFI_EMBED=mozilla,eu rebar3 compile
+```
+
+rebar3 does not track environment variables, so rebuild certifi when you
+change it:
+
+```shell
+rebar3 clean --apps=certifi
+CERTIFI_EMBED=eu rebar3 compile
 ```
 
 With Mix:
 
 ```shell
-CERTIFI_EMBED_EU=1 mix deps.compile certifi --force
+CERTIFI_EMBED=mozilla,eu mix deps.compile certifi --force
 ```
 
-Embedding adds about 360 KB to `certifi.beam`.
+### Notes
+
+- The environment variable wins over the `rebar.config` setting.
+- An unknown name, such as `mozila`, stops the compilation with an
+  `invalid_certifi_embed` error.
+- `certifi:cacertfile/0` and `certifi:eu_cacertfile/0` return the PEM paths
+  in every mode.
+- Releases must include certifi's `priv` directory when a bundle is not
+  embedded. rebar3 and Mix releases do this by default.
 
 ## Update the bundle
 

@@ -7,8 +7,11 @@
   website authentication certificates (QWACs). Use it when you need to accept
   servers whose issuer is in the EU trusted lists but not in the Mozilla
   bundle. The default `cacerts/0` is unchanged.
-- The EU bundle is read from disk on first use. Compile with
-  `CERTIFI_EMBED_EU=1` to embed it in the module instead.
+- Choose which bundles are embedded in the module at compile time with
+  `CERTIFI_EMBED` (`mozilla`, `eu`, `mozilla,eu` or `none`), as an
+  environment variable or in your rebar.config. Bundles that are not embedded
+  are read from disk on first use. The default embeds the Mozilla bundle only,
+  as before.
 - The EU bundle is built only from trusted lists whose signatures verify, and a
   weekly job now proposes updates to both bundles as pull requests.
 - certifi now declares `public_key` as a runtime dependency.
