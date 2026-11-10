@@ -2,7 +2,7 @@
  [{description, "CA bundle adapted from Mozilla by https://certifi.io"},
   {vsn, "2.18.0"},
   {registered, []},
-  {applications, [kernel,stdlib]},
+  {applications, [kernel, stdlib, public_key]},
   {env,[]},
   {modules, []},
 

@@ -22,4 +22,6 @@ jobs:
       - uses: actions/checkout@v5
       - run: rebar3 --version
       - run: rebar3 eunit
+      - name: eunit with the EU bundle embedded
+        run: rm -rf _build/test/lib/certifi && CERTIFI_EMBED_EU=1 rebar3 eunit
       - run: rebar3 dialyzer

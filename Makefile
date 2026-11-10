@@ -1,4 +1,4 @@
-.PHONY: update
+.PHONY: update update-eu
 
 # Mozilla's server-authentication roots, published by the curl project.
 update:
@@ -20,3 +20,8 @@ update:
 	openssl crl2pkcs7 -nocrl -certfile "$$tmpdir/cacerts.pem" -out "$$tmpdir/cacerts.p7b"; \
 	chmod 644 "$$tmpdir/cacerts.pem"; \
 	mv "$$tmpdir/cacerts.pem" priv/cacerts.pem
+
+# CA certificates for qualified website authentication from the EU trusted
+# lists. Requires curl and xmlsec1. Pass REPORT=file to save the report.
+update-eu:
+	escript scripts/update_eu.escript $(if $(REPORT),--report $(REPORT))
