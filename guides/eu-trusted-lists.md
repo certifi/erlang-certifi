@@ -168,4 +168,7 @@ request when something changed.
 - To check the pinned LOTL signer keys, compare
   `scripts/eu_lotl_signers.pem` with the certificates published in the
   Official Journal of the EU.
+- On OTP 21 and 22, `ssl` cannot decode the few certificates signed with
+  RSA-PSS. It ignores them with an "Ignoring a CA cert" warning and uses the
+  rest of the bundle.
 - Revocation is not checked. Use OTP `ssl` CRL options if you need it.

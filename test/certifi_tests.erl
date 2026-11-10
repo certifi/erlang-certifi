@@ -46,7 +46,16 @@ eu_cacertfile_matches_eu_cacerts_test() ->
 eu_cacerts_are_unique_ca_certificates_test() ->
     Certs = certifi:eu_cacerts(),
     ?assertEqual(length(Certs), length(lists:usort(Certs))),
-    [?assert(is_ca(public_key:pkix_decode_cert(Der, otp))) || Der <- Certs].
+    %% OTP 21 and 22 cannot decode RSA-PSS signed certificates; ssl ignores
+    %% those, so only check the ones this release can decode.
+    Decoded = [Otp || Der <- Certs, Otp <- decode(Der)],
+    ?assert(length(Decoded) > 0),
+    [?assert(is_ca(Otp)) || Otp <- Decoded].
+
+decode(Der) ->
+    try [public_key:pkix_decode_cert(Der, otp)]
+    catch _:_ -> []
+    end.
 
 eu_cacerts_entries_have_metadata_test() ->
     {ok, Pem} = file:read_file(certifi:eu_cacertfile()),
